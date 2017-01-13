@@ -30,4 +30,10 @@ public class ArbreUtils {
 		} while (value.compareTo(n) != -1);
 		return value;
 	}
+	
+	public static BigInteger catalan(BigInteger n){
+		
+		return null;
+	}
+	
 }
