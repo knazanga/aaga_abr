@@ -12,7 +12,7 @@ public class NoeudBinaire extends Noeud {
 
 	@Override
 	public String toString() {
-		return "(ni, " + gauche + ", " + droite + ")";
+		return "[.o " + gauche + " " + droite + " ]";
 	}
 
 	public Noeud getGauche() {
