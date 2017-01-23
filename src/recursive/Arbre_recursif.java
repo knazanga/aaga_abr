@@ -9,6 +9,9 @@ import java.util.Random;
 import java.util.Set;
 
 public class Arbre_recursif {
+	public static final int BINARY_TREE = 0;
+	public static final int BINARY_CROISSANT_TREE = 1;
+	public static final int GENERAL_CROISSANT_TREE = 2;
 
 	public static long combinaison2(int p, int n) throws Exception {
 		long result = 1L;
@@ -71,8 +74,16 @@ public class Arbre_recursif {
 		return new BigInteger(maxvalue.bitLength(), new Random()).mod(maxvalue);
 	}
 
-	public static int[] decomposition(int n) {
-		List<BigInteger> dec = createDec2(n);
+	public static int[] decomposition(int n, int treeType) {
+		List<BigInteger> dec;
+		switch (treeType) {
+		case BINARY_CROISSANT_TREE:
+			dec = createDec2(n);
+			break;
+		default:
+			dec = createDec(n);
+			break;
+		}
 		BigInteger r = getRandomBigInteger(getCatNumber(n));
 		int i = 0;
 		while (r.compareTo(BigInteger.valueOf(0)) > 0) {
@@ -112,32 +123,25 @@ public class Arbre_recursif {
 		return result;
 	}
 
-	public static Noeud recursiveTree(int n) {
+	public static Noeud recursiveTree(int n, int treeType) {
 		if (n == 0) {
 			return new Feuille();
 		} else if (n == 1) {
 			return new NoeudBinaire(new Feuille(), new Feuille());
 		} else {
-			int[] composants = decomposition(n);
+			int[] composants = decomposition(n, treeType);
 			if (composants[0] == 0) {
-				return new NoeudBinaire(recursiveTree(n - 1), new Feuille());
+				return new NoeudBinaire(recursiveTree(n - 1, treeType), new Feuille());
 			} else if (composants[0] == n - 1) {
-				return new NoeudBinaire(new Feuille(), recursiveTree(n - 1));
+				return new NoeudBinaire(new Feuille(), recursiveTree(n - 1, treeType));
 			} else {
-				return new NoeudBinaire(recursiveTree(composants[0]), recursiveTree(composants[1]));
+				return new NoeudBinaire(recursiveTree(composants[0], treeType), recursiveTree(composants[1], treeType));
 			}
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
-		Set<List<Integer>> compo = composition(6);
 
-		for (List<Integer> l : compo) {
-			System.out.print("[");
-			for (Integer i : l) {
-				System.out.print(i + " ");
-			}
-			System.out.print("]\n");
-		}
+		System.out.println(recursiveTree(1000, BINARY_CROISSANT_TREE));
 	}
 }
