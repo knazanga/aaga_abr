@@ -2,11 +2,8 @@ package recursive;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class Arbre_recursif {
 	public static final int BINARY_TREE = 0;
@@ -94,33 +91,6 @@ public class Arbre_recursif {
 			i--;
 		}
 		return new int[] { i, n - i - 1 };
-	}
-
-	public static Set<List<Integer>> composition(int n) {
-
-		Set<List<Integer>> compositions = new HashSet<>();
-		compositions.add(Arrays.asList(n));
-		if (n > 1) {
-			for (int i = 1; i < n; i++) {
-				compositions.add(Arrays.asList(i, n - i));
-				compositions.addAll(produitCroise(composition(i), composition(n - i)));
-			}
-		}
-		return compositions;
-	}
-
-	public static <T> Set<List<T>> produitCroise(Set<List<T>> list1, Set<List<T>> list2) {
-		Set<List<T>> result = new HashSet<>();
-		ArrayList<T> tmp;
-		for (List<T> l : list1) {
-			for (List<T> l2 : list2) {
-				tmp = new ArrayList<>();
-				tmp.addAll(l);
-				tmp.addAll(l2);
-				result.add(tmp);
-			}
-		}
-		return result;
 	}
 
 	public static Noeud recursiveTree(int n, int treeType) {
