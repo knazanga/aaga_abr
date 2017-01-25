@@ -68,7 +68,7 @@ public class Arbre_recursif {
 	}
 
 	public static BigInteger getRandomBigInteger(BigInteger maxvalue) {
-		return new BigInteger(maxvalue.bitLength(), new Random()).mod(maxvalue);
+		return new BigInteger(maxvalue.bitLength(), new Random(System.currentTimeMillis())).mod(maxvalue);
 	}
 
 	public static int[] decomposition(int n, int treeType) {

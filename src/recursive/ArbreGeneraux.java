@@ -3,6 +3,9 @@ package recursive;
 import static recursive.Arbre_recursif.factoriel;
 import static recursive.Arbre_recursif.getRandomBigInteger;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,26 +130,74 @@ public class ArbreGeneraux {
 		} else {
 			int i = 1;
 			tree.setKey(i);
-			List<GeneralTree> nodes = tree.getChildren();
-			while (!nodes.isEmpty()) {
-				Random rand = new Random();
+			List<GeneralTree> nodes = tree.getChildren().stream().filter(t -> t.getKey() == 0)
+					.collect(Collectors.toList());
+			while(!nodes.isEmpty()){
+				Random rand = new Random(System.currentTimeMillis());
 				int index = rand.nextInt(nodes.size());
-				i++;
 				GeneralTree node = nodes.get(index);
-				node.setKey(i);
-				nodes.addAll(node.getChildren());
+				if (node.getKey() == 0) {
+					i++;
+					node.setKey(i);
+					nodes.addAll(node.getChildren());
+				}
 				nodes = nodes.stream().filter(n -> n.getKey() == 0).collect(Collectors.toList());
 			}
-
 			return tree;
 		}
 	}
 
+	public static String output(GeneralTree tree) {
+		String str = "";
+		if (tree != null) {
+			if (!tree.getChildren().isEmpty()) {
+				str += tree.getKey() + "-- { ";
+				for (GeneralTree t : tree.getChildren()) {
+					str += t.getKey() + " ";
+				}
+				str += " }\n";
+
+				for (GeneralTree t : tree.getChildren()) {
+					str += output(t);
+				}
+			}
+		}
+		return str;
+	}
+
+	public static void printTree(GeneralTree t) {
+		System.out.print(t.getKey() + ":");
+
+		for (GeneralTree i : t.getChildren()) {
+			System.out.print(i.getKey() + " ");
+		}
+		System.out.print("\n");
+		for (GeneralTree i : t.getChildren()) {
+			if (!i.getChildren().isEmpty())
+				printTree(i);
+		}
+	}
+
+	public static void outputOnDotFile(String file, GeneralTree tree) {
+		try {
+			FileWriter fw = new FileWriter(new File(file));
+			fw.write("strict graph{\n\t");
+			fw.write(output(tree));
+			fw.write("\n}");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
-		// System.out.println(generalTreeNumber(6));
+		 //System.out.println(generalTreeNumber(4));
 		// System.out.println(generalTreeDec(5));
-		GeneralTree tree1 = recursiveGeneralTree(16);
-		System.out.println(tree1);
-		System.out.println(labelTree(tree1));
+		int i = 15;
+		GeneralTree tree = recursiveGeneralTree(i);
+		System.out.println(tree);
+		tree = labelTree(tree);
+		System.out.println(tree);
+		outputOnDotFile("graph"+i+".dot", tree);
 	}
 }
