@@ -1,12 +1,16 @@
 package recursive;
 
 import static recursive.Arbre_recursif.factoriel;
+import static recursive.Arbre_recursif.getRandomBigInteger;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class ArbreGeneraux {
@@ -68,7 +72,58 @@ public class ArbreGeneraux {
 		}
 	}
 
-	public static void main(String[] args) {
-		System.out.println(generalTreeNumber(4));
+	public static Map<List<Integer>, BigInteger> generalTreeDec(int n) {
+		Map<List<Integer>, BigInteger> dec = new HashMap<>();
+		Set<List<Integer>> compositions = composition(n - 1);
+		BigInteger value;
+		for (List<Integer> l : compositions) {
+			value = BigInteger.ONE;
+			value = value.multiply(multiBinomial(l));
+			for (Integer i : l) {
+				value = value.multiply(generalTreeNumber(i));
+			}
+			dec.put(l, value);
+		}
+		return dec;
+	}
+
+	public static List<Integer> decomposition(int n) {
+		Map<List<Integer>, BigInteger> dec = generalTreeDec(n);
+		BigInteger r = getRandomBigInteger(generalTreeNumber(n));
+		List<Integer> decomp = null;
+		for (List<Integer> l : dec.keySet()) {
+			r = r.subtract(dec.get(l));
+			if (r.compareTo(BigInteger.valueOf(0)) <= 0) {
+				decomp = l;
+				break;
+			}
+		}
+
+		return decomp;
+
+	}
+
+	public static GeneralTree recursiveGeneralTree(int n) {
+		GeneralTree tree = null;
+		if (n == 1) {
+			tree = new GeneralTree();
+		} else if (n == 2) {
+			tree = new GeneralTree();
+			tree.addChild(new GeneralTree());
+		} else {
+			tree = new GeneralTree();
+			List<Integer> decomp = decomposition(n);
+			for (Integer i : decomp) {
+				tree.addChild(recursiveGeneralTree(i));
+			}
+		}
+		return tree;
+	}
+
+		public static void main(String[] args) {
+		// System.out.println(generalTreeNumber(6));
+		// System.out.println(generalTreeDec(5));
+		GeneralTree tree = recursiveGeneralTree(5);
+		System.out.println(tree);
 	}
 }
