@@ -112,6 +112,9 @@ public class Arbre_recursif {
 
 	public static void main(String[] args) throws Exception {
 
-		System.out.println(recursiveTree(1000, BINARY_CROISSANT_TREE));
+		long before = System.currentTimeMillis();
+		System.out.println(recursiveTree(1000, GENERAL_CROISSANT_TREE));
+		long after = System.currentTimeMillis();
+		System.out.println("Execution time : "+(after-before)+" ms ("+((after-before)/1000)+" s)");
 	}
 }

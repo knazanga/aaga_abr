@@ -44,15 +44,15 @@ public class Statistiques {
 	public static int largeurArbreBin(NoeudBinaire arbre){
 		int nbGauche = 0;
 		int nbDroite = 0;
-//		if(arbre.getGauche().toString().equals("f") && (arbre.getDroite().toString().equals("f")))
-//			return 2;
-//		
-//		else {
+		if(arbre.getGauche().toString().equals("f") && (arbre.getDroite().toString().equals("f")))
+			return 2;
+		
+		else {
 			if(!arbre.getGauche().toString().equals("f"))
 				nbGauche = (1 + largeurGauche((NoeudBinaire)arbre.getGauche()));
 			if(!arbre.getDroite().toString().equals("f"))
 				nbDroite = (1 + largeurDroite((NoeudBinaire)arbre.getDroite()));
-		//}
+		}
 			
 				
 		return(nbGauche + nbDroite);
@@ -75,7 +75,7 @@ public class Statistiques {
 	
 
 	public static void main(String[] args) {
-		Noeud arbre = Arbre_recursif.recursiveTree(28, 2);
+		Noeud arbre = Arbre_recursif.recursiveTree(150, 2);
 		System.out.println(arbre);
 		int profondeur = profondeur(arbre);
 		System.out.println("profondeur arbre = "+profondeur);
