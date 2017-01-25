@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ArbreGeneraux {
 
@@ -120,10 +121,32 @@ public class ArbreGeneraux {
 		return tree;
 	}
 
-		public static void main(String[] args) {
+	public static GeneralTree labelTree(GeneralTree tree) {
+		if (tree == null) {
+			return tree;
+		} else {
+			int i = 1;
+			tree.setKey(i);
+			List<GeneralTree> nodes = tree.getChildren();
+			while (!nodes.isEmpty()) {
+				Random rand = new Random();
+				int index = rand.nextInt(nodes.size());
+				i++;
+				GeneralTree node = nodes.get(index);
+				node.setKey(i);
+				nodes.addAll(node.getChildren());
+				nodes = nodes.stream().filter(n -> n.getKey() == 0).collect(Collectors.toList());
+			}
+
+			return tree;
+		}
+	}
+
+	public static void main(String[] args) {
 		// System.out.println(generalTreeNumber(6));
 		// System.out.println(generalTreeDec(5));
-		GeneralTree tree = recursiveGeneralTree(5);
-		System.out.println(tree);
+		GeneralTree tree1 = recursiveGeneralTree(16);
+		System.out.println(tree1);
+		System.out.println(labelTree(tree1));
 	}
 }

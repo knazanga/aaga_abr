@@ -3,7 +3,7 @@ package recursive;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralTree {
+public class GeneralTree implements Cloneable {
 
 	int key;
 	List<GeneralTree> children;
@@ -26,6 +26,17 @@ public class GeneralTree {
 
 	public List<GeneralTree> getChildren() {
 		return this.children;
+	}
+
+	@Override
+	public GeneralTree clone() {
+		GeneralTree tree = null;
+		try {
+			tree = (GeneralTree) super.clone();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tree;
 	}
 
 	@Override
