@@ -132,7 +132,7 @@ public class ArbreGeneraux {
 			tree.setKey(i);
 			List<GeneralTree> nodes = tree.getChildren().stream().filter(t -> t.getKey() == 0)
 					.collect(Collectors.toList());
-			while(!nodes.isEmpty()){
+			while (!nodes.isEmpty()) {
 				Random rand = new Random(System.currentTimeMillis());
 				int index = rand.nextInt(nodes.size());
 				GeneralTree node = nodes.get(index);
@@ -190,14 +190,48 @@ public class ArbreGeneraux {
 		}
 	}
 
+	public static void outputUnlablledTree(String file, GeneralTree tree){
+		try {
+			FileWriter fw = new FileWriter(new File(file));
+			fw.write("\\Tree "+tree.toString());
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public static void main(String[] args) {
-		 //System.out.println(generalTreeNumber(4));
-		// System.out.println(generalTreeDec(5));
-		int i = 15;
-		GeneralTree tree = recursiveGeneralTree(i);
-		System.out.println(tree);
-		tree = labelTree(tree);
-		System.out.println(tree);
-		outputOnDotFile("graph"+i+".dot", tree);
+		int size = 15;
+		String output = "output.dot";
+		boolean labelled = true;
+		if (args.length > 0) {
+			for (int i = 0; i < args.length; i++) {
+				if (args[i].equalsIgnoreCase("-size")) {
+					try {
+						size = Integer.valueOf(args[i + 1]);
+					} catch (Exception e) {
+						System.out.println("Mauvais paramètre de taille, il sera construit un arbre de taille 15");
+					}
+				}
+				if (args[i].equalsIgnoreCase("-o")) {
+					output = args[i + 1];
+					if (!output.endsWith(".dot"))
+						output += ".dot";
+				}
+				if (args[i].equalsIgnoreCase("-ul")) {
+					labelled = false;
+				}
+
+			}
+		}
+
+		GeneralTree tree = recursiveGeneralTree(size);
+		if (labelled) {
+			tree = labelTree(tree);
+			outputOnDotFile(output, tree);
+		}else{
+			outputUnlablledTree(output, tree);
+		}
+		
+
 	}
 }
